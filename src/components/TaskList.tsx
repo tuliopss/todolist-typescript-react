@@ -4,10 +4,11 @@ import { ITask } from "../interfaces/Task";
 interface Props {
   taskList: ITask[];
   handleDelete(id: number): void;
-  handleEdit(): void;
+  handleEdit(task: ITask): void;
+  task?: ITask;
 }
 
-const TaskList = ({ taskList, handleDelete, handleEdit }: Props) => {
+const TaskList = ({ taskList, handleDelete, handleEdit, task }: Props) => {
   return (
     <>
       {taskList.length > 0 ? (
@@ -22,7 +23,7 @@ const TaskList = ({ taskList, handleDelete, handleEdit }: Props) => {
               <i
                 className='bi bi-pencil'
                 id={styles.edit_icon}
-                onClick={handleEdit}></i>
+                onClick={() => handleEdit(task)}></i>
               <i
                 className='bi bi-trash'
                 id={styles.delete_icon}

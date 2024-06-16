@@ -10,6 +10,8 @@ import Modal from "./components/Modal/Modal";
 function App() {
   const [taskList, setTaskList] = useState<ITask[]>([]);
 
+  const [taskToUpdate, setTaskToUpdate] = useState<ITask | null>(null);
+
   const deleteTask = (id: number) => {
     setTaskList(
       taskList.filter((task) => {
@@ -18,24 +20,59 @@ function App() {
     );
   };
 
+  // const toggleModal = (display: boolean) => {
+  //   const modal = document.querySelector("#modal_container");
+
+  //   if (modal) {
+  //     modal!.classList.remove("hide");
+  //     console.log("open");
+  //   } else {
+  //     modal!.classList.add("hide");
+  //     console.log("close");
+  //   }
+  // };
+
   const toggleModal = (display: boolean) => {
     const modal = document.querySelector("#modal_container");
 
     if (modal) {
-      modal!.classList.remove("hide");
-    } else {
-      modal!.classList.add("hide");
+      if (display) {
+        modal.classList.remove("hide");
+        console.log("open");
+      } else {
+        modal.classList.add("hide");
+        console.log("close");
+      }
     }
   };
 
-  const editTask = (): void => {
+  const editTask = (task: ITask): void => {
     toggleModal(true);
+    setTaskToUpdate(task);
+  };
+
+  const updateTask = (id: number, taskName: string, difficulty: number) => {
+    const updatedTask: ITask = { id, taskName, difficulty };
+
+    const updatedItems = taskList.map((task) => {
+      return updatedTask.id === task.id ? (task = updatedTask) : task;
+    });
+
+    setTaskList(updatedItems);
+    toggleModal(false);
   };
 
   return (
     <div>
       <Modal
-        children={<TaskForm btnText='Editar tarefa' taskList={taskList} />}
+        children={
+          <TaskForm
+            btnText='Editar tarefa'
+            taskList={taskList}
+            task={taskToUpdate}
+            handleUpdate={updateTask}
+          />
+        }
       />
       <Header />
       <main id={styles.main}>
